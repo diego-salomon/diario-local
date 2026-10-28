@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.diego.transcriptor</string>
+
+	<!-- El programa corre dentro de Transcriptor.app. Es el mismo Python del
+	     proyecto, empaquetado como app para poder darle "Full Disk Access"
+	     (macOS no acepta ejecutables sueltos en esa lista). -->
+	<key>ProgramArguments</key>
+	<array>
+		<string>/Users/YOUR_USER/Diario-transcriptor/Transcriptor.app/Contents/MacOS/Transcriptor</string>
+		<string>/Users/YOUR_USER/Diario-transcriptor/transcriptor.py</string>
+	</array>
+
+	<!-- Le decimos a ese Python donde estan sus librerias base (PYTHONHOME)
+	     y las del proyecto, como mlx-whisper (PYTHONPATH). -->
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>PYTHONHOME</key>
+		<string>/Users/YOUR_USER/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none</string>
+		<key>PYTHONPATH</key>
+		<string>/Users/YOUR_USER/Diario-transcriptor/.venv/lib/python3.12/site-packages</string>
+	</dict>
+
+	<!-- Arranca al iniciar sesion en el Mac. -->
+	<key>RunAtLoad</key>
+	<true/>
+
+	<!-- Si el programa se cae por cualquier motivo, launchd lo vuelve a levantar. -->
+	<key>KeepAlive</key>
+	<true/>
+
+	<!-- Espera un minuto antes de reintentar, para no entrar en un bucle de reinicios. -->
+	<key>ThrottleInterval</key>
+	<integer>60</integer>
+
+	<key>WorkingDirectory</key>
+	<string>/Users/YOUR_USER/Diario-transcriptor</string>
+
+	<!-- Aqui van los mensajes de arranque y los errores graves.
+	     El registro normal del dia a dia va a Diario/transcriptor.log -->
+	<key>StandardOutPath</key>
+	<string>/Users/YOUR_USER/Diario-transcriptor/launchd-salida.log</string>
+	<key>StandardErrorPath</key>
+	<string>/Users/YOUR_USER/Diario-transcriptor/launchd-errores.log</string>
+</dict>
+</plist>

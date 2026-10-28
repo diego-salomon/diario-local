@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.diego.maxwell.diario</string>
+
+    <!-- Corre con Transcriptor.app (el mismo Python del transcriptor), que ya
+         tiene "Full Disk Access" y por eso puede leer el brief en Documents.
+         Con /usr/bin/python3 macOS le negaba el acceso. -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/YOUR_USER/Diario-transcriptor/Transcriptor.app/Contents/MacOS/Transcriptor</string>
+        <string>/Users/YOUR_USER/Diario-transcriptor/maxwell/correo-diario.py</string>
+    </array>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PYTHONHOME</key>
+        <string>/Users/YOUR_USER/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none</string>
+    </dict>
+
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>10</integer>
+        <key>Minute</key>
+        <integer>5</integer>
+    </dict>
+
+    <key>StandardOutPath</key>
+    <string>/Users/YOUR_USER/Diario-transcriptor/maxwell/launchd-salida.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/YOUR_USER/Diario-transcriptor/maxwell/launchd-errores.log</string>
+</dict>
+</plist>
