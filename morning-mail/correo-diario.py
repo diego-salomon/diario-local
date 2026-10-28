@@ -23,7 +23,7 @@ from pathlib import Path
 AQUI = Path(__file__).resolve().parent
 EPUB = AQUI / "maxwell.epub"
 PASSWORD_FILE = AQUI / "maxwell_password.txt"
-BRIEF = Path.home() / "Documents/Personal/Diario/brief-hoy.html"
+BRIEF = Path(os.environ.get("DIARIO_DIR", Path.home() / "Documents/Personal/Diario")).expanduser() / "brief-hoy.html"
 CORREO = os.environ["DIARIO_EMAIL"]  # remitente y destinatario
 # ----------------------------
 

@@ -31,7 +31,7 @@ from pathlib import Path
 # Carpeta del diario. Es la que se ve como "Documentos > Personal > Diario"
 # en el Finder, que iCloud sincroniza sola. No confundir con
 # "Documentos > Diario".
-DIARIO = Path.home() / "Documents/Personal/Diario"
+DIARIO = Path(os.environ.get("DIARIO_DIR", Path.home() / "Documents/Personal/Diario")).expanduser()
 CARPETA_TEXTO = DIARIO / "Transcripciones"
 CARPETA_TEXTO_OTRAS = CARPETA_TEXTO / "Otras"
 ARCHIVO_LOG = DIARIO / "transcriptor.log"
