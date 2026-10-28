@@ -3,15 +3,15 @@
 <plist version="1.0">
 <dict>
 	<key>Label</key>
-	<string>com.diego.transcriptor</string>
+	<string>local.diario.transcriptor</string>
 
 	<!-- El programa corre dentro de Transcriptor.app. Es el mismo Python del
 	     proyecto, empaquetado como app para poder darle "Full Disk Access"
 	     (macOS no acepta ejecutables sueltos en esa lista). -->
 	<key>ProgramArguments</key>
 	<array>
-		<string>/Users/YOUR_USER/Diario-transcriptor/Transcriptor.app/Contents/MacOS/Transcriptor</string>
-		<string>/Users/YOUR_USER/Diario-transcriptor/transcriptor.py</string>
+		<string>/Users/YOUR_USER/diario-local/Transcriptor.app/Contents/MacOS/Transcriptor</string>
+		<string>/Users/YOUR_USER/diario-local/transcriptor.py</string>
 	</array>
 
 	<!-- Le decimos a ese Python donde estan sus librerias base (PYTHONHOME)
@@ -21,7 +21,7 @@
 		<key>PYTHONHOME</key>
 		<string>/Users/YOUR_USER/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none</string>
 		<key>PYTHONPATH</key>
-		<string>/Users/YOUR_USER/Diario-transcriptor/.venv/lib/python3.12/site-packages</string>
+		<string>/Users/YOUR_USER/diario-local/.venv/lib/python3.12/site-packages</string>
 	</dict>
 
 	<!-- Arranca al iniciar sesion en el Mac. -->
@@ -37,13 +37,13 @@
 	<integer>60</integer>
 
 	<key>WorkingDirectory</key>
-	<string>/Users/YOUR_USER/Diario-transcriptor</string>
+	<string>/Users/YOUR_USER/diario-local</string>
 
 	<!-- Aqui van los mensajes de arranque y los errores graves.
 	     El registro normal del dia a dia va a Diario/transcriptor.log -->
 	<key>StandardOutPath</key>
-	<string>/Users/YOUR_USER/Diario-transcriptor/launchd-salida.log</string>
+	<string>/Users/YOUR_USER/diario-local/launchd-salida.log</string>
 	<key>StandardErrorPath</key>
-	<string>/Users/YOUR_USER/Diario-transcriptor/launchd-errores.log</string>
+	<string>/Users/YOUR_USER/diario-local/launchd-errores.log</string>
 </dict>
 </plist>

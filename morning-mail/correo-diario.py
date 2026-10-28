@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
 """
-Correo diario — arma y envía EL correo de la mañana de Diego:
-1) el brief que el asistente dejó en ~/Documents/Personal/Diario/brief-hoy.html
-2) + la lección del día de SU copia del Maxwell Daily Reader (EPUB)
-y lo manda de su Gmail a su Gmail. Todo local; solo sale el correo a sí mismo.
+Correo diario: arma y envía un solo correo por la mañana con
+1) el brief del día que un asistente dejó en $DIARIO_DIR/brief-hoy.html
+2) y, si hay un libro configurado, la lectura del día desde un EPUB.
+Lo manda de tu Gmail a tu Gmail. Todo local; solo sale el correo a ti mismo.
 
-Config: maxwell.epub y maxwell_password.txt (contraseña de aplicación de
-Gmail, una línea) en la misma carpeta que este script.
+Config (variables de entorno):
+  DIARIO_EMAIL   tu dirección de Gmail (remitente y destinatario)
+  DIARIO_DIR     carpeta del brief (por defecto ~/Documents/Diario)
+  LIBRO_EPUB     opcional: ruta a un EPUB de lecturas diarias
+  LIBRO_TITULO   opcional: el nombre que sale encima de la lectura
+La contraseña de aplicación de Gmail va en el Llavero de macOS:
+  security add-generic-password -s diario-gmail -a TU_CORREO -w
 """
 
 import os
@@ -21,12 +26,16 @@ from pathlib import Path
 
 # ---------- config ----------
 AQUI = Path(__file__).resolve().parent
-EPUB = AQUI / "maxwell.epub"
-PASSWORD_FILE = AQUI / "maxwell_password.txt"
-BRIEF = Path(os.environ.get("DIARIO_DIR", Path.home() / "Documents/Personal/Diario")).expanduser() / "brief-hoy.html"
+EPUB = Path(os.environ["LIBRO_EPUB"]).expanduser() if os.environ.get("LIBRO_EPUB") else None
+LIBRO_TITULO = os.environ.get("LIBRO_TITULO", "Lectura del día")
+BRIEF = Path(os.environ.get("DIARIO_DIR", Path.home() / "Documents/Diario")).expanduser() / "brief-hoy.html"
 CORREO = os.environ["DIARIO_EMAIL"]  # remitente y destinatario
 # ----------------------------
 
+# Cómo encontrar la lectura de hoy dentro del EPUB. Está hecho para un libro
+# concreto (una entrada por día, el archivo c{n} donde n = OPENER[mes] + día).
+# Para otro libro, abre el EPUB como zip y ajusta OPENER y NOMBRE_ARCHIVO.
+NOMBRE_ARCHIVO = os.environ.get("LIBRO_PATRON", "OEBPS/c{n}.html")
 OPENER = {1: 5, 2: 37, 3: 67, 4: 99, 5: 130, 6: 162,
           7: 193, 8: 225, 9: 257, 10: 288, 11: 320, 12: 351}
 MESES = ["", "enero", "febrero", "marzo", "abril", "mayo", "junio", "julio",
@@ -42,11 +51,11 @@ PARRAFO = SERIF + "font-size:17px;line-height:1.75;color:#24263f;margin:14px 0 0
 SEP = '<div style="height:1px;background:#e4d6d6;margin:36px 0 28px;line-height:1px;font-size:1px">&nbsp;</div>'
 
 
-def maxwell_de_hoy() -> str:
+def lectura_de_hoy() -> str:
     """La lección del día de tu EPUB, con el estilo de las lecturas del correo."""
     hoy = date.today()
     n = OPENER[hoy.month] + hoy.day
-    nombre = f"OEBPS/Maxw_9781400280162_epub_c{n}_r1.html"
+    nombre = NOMBRE_ARCHIVO.format(n=n)
     with zipfile.ZipFile(EPUB) as z:
         html = z.read(nombre).decode("utf-8")
     cuerpo = re.search(r"<body[^>]*>(.*)</body>", html, re.S).group(1)
@@ -87,17 +96,16 @@ def armar_correo() -> MIMEText:
         partes.append(
             f'<div style="{ESTILO}"><p style="padding-top:24px">Hoy no se generó el brief '
             f"(la Mac o el asistente no corrieron a tiempo). "
-            f"Va solo tu lectura.</p></div>"
+            f"</p></div>"
         )
         asunto = None
 
-    partes.append(
-        f'<div style="{ESTILO}">{SEP}'
-        f'<p style="{ROTULO}">Maxwell</p>'
-        f"{maxwell_de_hoy()}"
-        f'<p style="margin:44px 0 0;padding-bottom:32px;font-size:12px;color:#5a5c78">'
-        f"Responde a este correo para corregirme o deshacer algo.</p></div>"
-    )
+    if EPUB and EPUB.exists():
+        partes.append(
+            f'<div style="{ESTILO}">{SEP}'
+            f'<p style="{ROTULO}">{LIBRO_TITULO}</p>'
+            f"{lectura_de_hoy()}</div>"
+        )
 
     html = ('<meta name="color-scheme" content="light only">'
             '<meta name="supported-color-schemes" content="light">'
@@ -110,7 +118,10 @@ def armar_correo() -> MIMEText:
 
 
 def enviar(msg: MIMEText) -> None:
-    password = PASSWORD_FILE.read_text().strip()
+    import subprocess
+    password = subprocess.run(
+        ["/usr/bin/security", "find-generic-password", "-s", "diario-gmail", "-a", CORREO, "-w"],
+        capture_output=True, text=True, check=True).stdout.strip()
     ctx = ssl.create_default_context()
     with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=ctx) as s:
         s.login(CORREO, password)
@@ -122,5 +133,5 @@ if __name__ == "__main__":
         enviar(armar_correo())
         print("enviado")
     except Exception as e:
-        (AQUI / "maxwell_error.log").write_text(f"{datetime.now()}: {e}\n")
+        (AQUI / "correo_error.log").write_text(f"{datetime.now()}: {e}\n")
         sys.exit(1)

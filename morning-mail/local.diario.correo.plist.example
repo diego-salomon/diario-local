@@ -3,34 +3,38 @@
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>com.diego.maxwell.diario</string>
+    <string>local.diario.correo</string>
 
     <!-- Corre con Transcriptor.app (el mismo Python del transcriptor), que ya
          tiene "Full Disk Access" y por eso puede leer el brief en Documents.
          Con /usr/bin/python3 macOS le negaba el acceso. -->
     <key>ProgramArguments</key>
     <array>
-        <string>/Users/YOUR_USER/Diario-transcriptor/Transcriptor.app/Contents/MacOS/Transcriptor</string>
-        <string>/Users/YOUR_USER/Diario-transcriptor/maxwell/correo-diario.py</string>
+        <string>/Users/YOUR_USER/diario-local/Transcriptor.app/Contents/MacOS/Transcriptor</string>
+        <string>/Users/YOUR_USER/diario-local/morning-mail/correo-diario.py</string>
     </array>
 
     <key>EnvironmentVariables</key>
     <dict>
         <key>PYTHONHOME</key>
         <string>/Users/YOUR_USER/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none</string>
+        <key>DIARIO_EMAIL</key>
+        <string>you@gmail.com</string>
+        <key>LIBRO_EPUB</key>
+        <string>/Users/YOUR_USER/diario-local/morning-mail/libro.epub</string>
     </dict>
 
     <key>StartCalendarInterval</key>
     <dict>
         <key>Hour</key>
-        <integer>10</integer>
+        <integer>8</integer>
         <key>Minute</key>
-        <integer>5</integer>
+        <integer>0</integer>
     </dict>
 
     <key>StandardOutPath</key>
-    <string>/Users/YOUR_USER/Diario-transcriptor/maxwell/launchd-salida.log</string>
+    <string>/Users/YOUR_USER/diario-local/morning-mail/launchd-salida.log</string>
     <key>StandardErrorPath</key>
-    <string>/Users/YOUR_USER/Diario-transcriptor/maxwell/launchd-errores.log</string>
+    <string>/Users/YOUR_USER/diario-local/morning-mail/launchd-errores.log</string>
 </dict>
 </plist>

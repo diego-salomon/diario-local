@@ -8,7 +8,7 @@ MLX Whisper y guarda el texto en la carpeta de Transcripciones. No sube
 nada a internet y no usa API keys.
 
 Para probarlo a mano una sola vez, sin dejarlo corriendo:
-    ~/Diario-transcriptor/.venv/bin/python ~/Diario-transcriptor/transcriptor.py --una-vez
+    .venv/bin/python transcriptor.py --una-vez
 """
 
 import logging
@@ -28,10 +28,8 @@ from pathlib import Path
 # Configuracion. Esto es lo unico que normalmente querras cambiar.
 # ---------------------------------------------------------------------------
 
-# Carpeta del diario. Es la que se ve como "Documentos > Personal > Diario"
-# en el Finder, que iCloud sincroniza sola. No confundir con
-# "Documentos > Diario".
-DIARIO = Path(os.environ.get("DIARIO_DIR", Path.home() / "Documents/Personal/Diario")).expanduser()
+# Carpeta del diario (por defecto Documentos > Diario). Cambiala con DIARIO_DIR.
+DIARIO = Path(os.environ.get("DIARIO_DIR", Path.home() / "Documents/Diario")).expanduser()
 CARPETA_TEXTO = DIARIO / "Transcripciones"
 CARPETA_TEXTO_OTRAS = CARPETA_TEXTO / "Otras"
 ARCHIVO_LOG = DIARIO / "transcriptor.log"
@@ -44,8 +42,8 @@ CARPETA_NOTAS_DE_VOZ = (
 )
 BASE_DE_DATOS = CARPETA_NOTAS_DE_VOZ / "CloudRecordings.db"
 
-# Fuente de respaldo: la carpeta donde antes el Atajo del iPhone dejaba los
-# audios. Se sigue vigilando por si algun dia vuelves a usarla.
+# Fuente de respaldo: cualquier audio que dejes en esta carpeta (por ejemplo,
+# desde un Atajo del iPhone o desde grabar-llamada) tambien se transcribe.
 CARPETA_AUDIO = DIARIO / "Audio"
 
 # Las grabaciones cuyo titulo empieza asi van a Transcripciones/. Las demas
