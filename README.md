@@ -1,6 +1,22 @@
-# Diario local
+<div align="center">
 
-Record a voice note on your iPhone and, a few minutes later, it's text on your Mac. Optionally, one email every morning with a brief of the day and a reading from a book.
+# 🎙️ Diario local
+
+### Record a voice note on your iPhone and, a few minutes later, it's text on your Mac. No cloud, no API keys, no cost.
+
+[![Python 3.12](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white&style=flat-square)](#run-it)
+[![MLX Whisper](https://img.shields.io/badge/Whisper-MLX_large--v3-000?style=flat-square)](#transcriber-transcriptorpy)
+[![Apple Silicon](https://img.shields.io/badge/Apple_Silicon-on_device-555?logo=apple&logoColor=white&style=flat-square)](#run-it)
+[![No cloud](https://img.shields.io/badge/no_cloud-no_API_keys-729B1B?style=flat-square)](#run-it)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
+
+<br>
+
+<img src="docs/assets/flow.png" width="900" alt="iPhone voice memo, synced through iCloud, transcribed on the Mac by MLX Whisper large-v3, saved as timestamped text. Optionally, one morning email." />
+
+</div>
+
+---
 
 Transcription runs on the Mac. No internet, no API keys, no cost.
 
@@ -32,4 +48,10 @@ DIARIO_EMAIL=you@gmail.com python3 morning-mail/correo-diario.py
 
 Schedule it with `morning-mail/local.diario.correo.plist.example`.
 
-Code comments are in Spanish. MIT license.
+Code comments are in Spanish.
+
+---
+
+<div align="center">
+<sub>Built by <a href="https://github.com/diego-salomon">Diego Salomón</a>. · <a href="https://www.linkedin.com/in/diegosalomon">LinkedIn</a></sub>
+</div>
